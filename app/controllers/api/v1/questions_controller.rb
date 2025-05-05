@@ -2,12 +2,14 @@ module Api
     module V1
         class QuestionsController < BaseController
             def index
-                questions = Question.all
-                serializer = QuestionSerializer.new(questions)
+                scope = Question.order(created_at: :desc)
+                page_data = paginate(scope)
+                serializer = QuestionSerializer.new(page_data)
 
                 render_success(
                     serializer: serializer,
-                    message: "Questions fetched succesfully"
+                    message: "Questions fetched succesfully",
+                    meta: pagination_meta(page_data)
                 )
             end
         end
