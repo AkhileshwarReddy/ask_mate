@@ -20,7 +20,7 @@ module Paginatable
             next_page:    scope.next_page,
             prev_page:    scope.prev_page,
             total_pages:  scope.total_pages,
-            total_count:  scope.total_count,
+            # total_count:  scope.total_count,
             per_page:     scope.limit_value
         }
     end

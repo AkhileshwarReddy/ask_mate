@@ -3,6 +3,7 @@ module Api
         class BaseController < ApplicationController
             include ErrorHandling
             include Paginatable
+            include Cacheable
         end
     end
 end

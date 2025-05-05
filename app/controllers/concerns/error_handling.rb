@@ -10,10 +10,11 @@ module ErrorHandling
     private
 
     def render_success(serializer:, message: "", meta: {}, status: :ok)
-        payload = serializer.serializable_hash
+        data =  block_given? ? yield : serializer.serializable_hash[:data]
+        
         render json: {
           success: true,
-          data:    payload[:data],
+          data:    data,
           message: message,
           meta:    meta,
           status:  status.to_s
