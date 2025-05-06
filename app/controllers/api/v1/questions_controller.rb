@@ -10,6 +10,14 @@ module Api
                     meta: result[:meta]
                 ) { result[:data] }
             end
+
+            def show
+                result = ::Questions::FetchShow.new(params).call
+
+                render_success(
+                    message: "Question fetched sucessfully"
+                ) { result[:data] }
+            end
         end
     end
 end

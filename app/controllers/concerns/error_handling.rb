@@ -2,14 +2,14 @@ module ErrorHandling
     extend ActiveSupport::Concern
 
     included do
-        rescue_from ActiveRecord::RecordNotFound,       with: :hanlde_not_found
+        rescue_from ActiveRecord::RecordNotFound,       with: :handle_not_found
         rescue_from ActiveRecord::RecordInvalid,        with: :handle_unprocessable_entity
         rescue_from ActionController::ParameterMissing, with: :handle_bad_request
     end
 
     private
 
-    def render_success(serializer:, message: "", meta: {}, status: :ok)
+    def render_success(serializer: nil, message: "", meta: {}, status: :ok)
         data =  block_given? ? yield : serializer.serializable_hash[:data]
         
         render json: {
