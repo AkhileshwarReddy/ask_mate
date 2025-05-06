@@ -23,7 +23,7 @@ module Questions
 
         def cache_key
             p = pagination_params
-
+            
             "questions/page=#{p[:page]}/per=#{p[:per_page]}/v=#{latest_timestamp(page_data)}"
         end
 

@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
-      get 'questions', to: 'questions#index'
+      resources :questions, only: %i[index show create update destroy] do
+        resources :answers, only: %i[index show create update destroy]
+      end
     end
   end
 end
