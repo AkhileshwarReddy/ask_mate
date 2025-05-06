@@ -32,10 +32,8 @@ module Questions
         end
 
         def build_payload(data)
-            ser_hash = @serializer.new(
-                data,
-                meta: pagination_meta(data)
-            ).serializable_hash
+            ser_hash = @serializer.new(data, meta: pagination_meta(data))
+                .serializable_hash
 
             {
                 data: ser_hash[:data],
