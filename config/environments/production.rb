@@ -87,4 +87,14 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  config.cache_store = :redis_cache_store, {
+    url:                ENV.fetch("REDIS_URL"),
+    namespace:          "askmate_cache",
+    expires_in:         1.hour,
+    reconnect_attempts: 1,
+    race_condition_ttl: 5.seconds
+  }
+
+  config.action_controller.perform_caching = true
 end

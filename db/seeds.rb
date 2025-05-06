@@ -7,3 +7,18 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+# db/seeds.rb
+require 'faker'
+
+records = 100_000.times.map do
+  {
+    title:      Faker::Lorem.sentence(word_count: 4),
+    body:       Faker::Lorem.paragraph(sentence_count: 2),
+    status:     "open",
+    view_count: 0,
+    created_at: Time.current,
+    updated_at: Time.current
+  }
+end
+
+Question.insert_all(records)

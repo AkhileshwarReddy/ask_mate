@@ -34,3 +34,4 @@
 
 # Ignore code coverage reports
 /coverage/*
+.byebug_history
