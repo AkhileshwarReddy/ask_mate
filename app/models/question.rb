@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+    has_many :answers, dependent: :destroy
+    
     STATUSES = %w[open closed].freeze
 
     validates :title, presence: true, length: { minimum: 10, maximum: 150 }

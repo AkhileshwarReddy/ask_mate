@@ -1,6 +1,8 @@
 module Api
     module V1
         class QuestionsController < BaseController
+            before_action :set_question, only: %i[update destroy]
+
             after_action :expire_question_from_cache, only: %i[update destroy]
             after_action :expire_index_cache, only: %i[create update destroy]
 
@@ -34,9 +36,8 @@ module Api
             end
 
             def update
-                question = Question.find(params[:id])
-                question.update!(question_params)
-                serializer = QuestionSerializer.new(question)
+                @question.update!(question_params)
+                serializer = QuestionSerializer.new(@question)
 
                 render_success(
                     serializer: serializer,
@@ -45,7 +46,7 @@ module Api
             end
 
             def destroy
-                Question.destroy!(params[:id])
+                @question.destroy!
 
                 head :no_content
             end
@@ -54,6 +55,10 @@ module Api
 
             def question_params
                 params.require(:question).permit(:title, :body, :status)
+            end
+
+            def set_question
+                @question = Question.find(params[:id])
             end
 
             def expire_index_cache

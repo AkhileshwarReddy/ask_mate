@@ -36,17 +36,17 @@ module ErrorHandling
         )
     end
 
-    def handle_bad_request
+    def handle_bad_request(exception)
         render_error(
             errors: exception.message,
             status: :bad_request
         )
     end
 
-    def handle_unprocessable_entity
+    def handle_unprocessable_entity(exception)
         render_error(
             errors: exception.record.errors.full_messages,
-            sttatus: :unprocessable_entity
+            status: :unprocessable_entity
         )
     end
 end
