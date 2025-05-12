@@ -2,7 +2,6 @@ module Api
     module V1
         class CommentsController < BaseController
             before_action :set_commentable
-            before_action :set_comment, only: %i[show update destroy]
 
             def index
                 comments = @commentable.comments.recent
@@ -13,8 +12,10 @@ module Api
             end
 
             def show
+                comment = @commentable.comments.find(params[:id])
+
                 render_success(message: "Comment fetched successfuly") do
-                    CommentSerializer.new(@comment).serializable_hash[:data]
+                    CommentSerializer.new(comment).serializable_hash[:data]
                 end
             end
 
@@ -27,15 +28,15 @@ module Api
             end
 
             def update
-                @comment.update!(comment_params)
+                comment = @commentable.comments.where(id: params[:id]).update!(comment_params)
 
                 render_success(message: "Comment updated successfuly") do
-                    CommentSerializer.new(@comment).serializable_hash[:data]
+                    CommentSerializer.new(comment).serializable_hash[:data]
                 end
             end
 
             def destroy
-                @comment.destroy!
+                @commentable.comments.find(params[:id]).destroy!
 
                 head :no_content
             end
@@ -55,10 +56,6 @@ module Api
                     # It should never happen if the routes are correct
                     raise ActionController::BadRequest, "Missing commentable"
                 end
-            end
-
-            def set_comment
-                @comment = Comment.find(params[:id])
             end
         end
     end

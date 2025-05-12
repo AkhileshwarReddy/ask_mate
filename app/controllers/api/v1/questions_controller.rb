@@ -16,6 +16,8 @@ module Api
             end
 
             def show
+                result = ::Questions::FetchShow.new(params).call
+                
                 render_success(message: "Question fetched successfully") do
                     result[:data]
                 end
