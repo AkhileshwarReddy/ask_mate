@@ -2,6 +2,8 @@ class Answer < ApplicationRecord
   before_validation :ensure_acceptance, on: :create
 
   belongs_to :question
+  
+  has_many :comments, as: :commentable, dependent: :destroy
 
   validates :body, presence: true, length: { minimum: 50, maximum: 1000 }
   validates :accepted, inclusion: { in: [true, false] }
