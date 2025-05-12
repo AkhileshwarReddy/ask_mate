@@ -10,7 +10,10 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :questions, only: %i[index show create update destroy] do
-        resources :answers, only: %i[index show create update destroy]
+        resources :comments
+        resources :answers, only: %i[index show create update destroy] do
+          resources :comments
+        end
       end
     end
   end

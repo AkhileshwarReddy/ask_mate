@@ -1,6 +1,8 @@
 module Api
     module V1
         class QuestionsController < BaseController
+            before_action :set_question, only: %i[update destroy]
+
             after_action :expire_question_from_cache, only: %i[update destroy]
             after_action :expire_index_cache, only: %i[create update destroy]
 
@@ -8,7 +10,6 @@ module Api
                 result = ::Questions::FetchIndex.new(params).call
 
                 render_success(
-                    serializer: nil,
                     message: "Questions fetched successfully",
                     meta: result[:meta]
                 ) { result[:data] }
@@ -16,36 +17,30 @@ module Api
 
             def show
                 result = ::Questions::FetchShow.new(params).call
-
-                render_success(
-                    message: "Question fetched successfully"
-                ) { result[:data] }
+                
+                render_success(message: "Question fetched successfully") do
+                    result[:data]
+                end
             end
 
             def create
                 question = Question.create!(question_params)
-                serializer = QuestionSerializer.new(question)
 
-                render_success(
-                    serializer: serializer,
-                    message: "Question created successfully",
-                    status: :created
-                )
+                render_success(message: "Question created successfully", status: :created) do
+                    QuestionSerializer.new(question).serializable_hash[:data]
+                end
             end
 
             def update
-                question = Question.find(params[:id])
-                question.update!(question_params)
-                serializer = QuestionSerializer.new(question)
+                @question.update!(question_params)
 
-                render_success(
-                    serializer: serializer,
-                    message: "Question updated successfully"
-                )
+                render_success(message: "Question updated successfully") do
+                    QuestionSerializer.new(@question).serializable_hash[:data]
+                end
             end
 
             def destroy
-                Question.destroy!(params[:id])
+                @question.destroy!
 
                 head :no_content
             end
@@ -54,6 +49,10 @@ module Api
 
             def question_params
                 params.require(:question).permit(:title, :body, :status)
+            end
+
+            def set_question
+                @question = Question.find(params[:id])
             end
 
             def expire_index_cache
