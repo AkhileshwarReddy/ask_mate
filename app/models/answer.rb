@@ -1,7 +1,7 @@
 class Answer < ApplicationRecord
   before_validation :ensure_acceptance, on: :create
 
-  belongs_to :question
+  belongs_to :question, counter_cache: true
   
   has_many :comments, as: :commentable, dependent: :destroy
 

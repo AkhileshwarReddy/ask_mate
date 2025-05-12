@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_12_175154) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_12_192330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_12_175154) do
     t.integer "view_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "answers_count", default: 0, null: false
     t.index ["created_at"], name: "index_questions_on_create_desc", order: :desc
   end
 

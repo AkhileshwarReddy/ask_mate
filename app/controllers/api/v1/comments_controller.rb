@@ -30,7 +30,7 @@ module Api
                 @comment.update!(comment_params)
 
                 render_success(message: "Comment updated successfuly") do
-                    CommentSerializer.new(comment).serializable_hash[:data]
+                    CommentSerializer.new(@comment).serializable_hash[:data]
                 end
             end
 
@@ -41,6 +41,10 @@ module Api
             end
 
             private
+
+            def comment_params
+                params.require(:comment).permit(:body)
+            end
 
             def set_commentable
                 if params[:answer_id]

@@ -18,7 +18,7 @@ module Questions
         private
 
         def page_data
-            @page_data ||= paginate(@model.order(created_at: :desc))
+            @page_data ||= paginate(@model.includes([:tags]).order(created_at: :desc))
         end
 
         def cache_key

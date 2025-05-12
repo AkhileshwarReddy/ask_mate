@@ -3,5 +3,5 @@ class Comment < ApplicationRecord
 
     validates :body, presence: true
 
-    scope :recent, -> { where(created_at: :desc) }
+    scope :recent, -> { order(created_at: :desc) }
 end

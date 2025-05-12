@@ -10,39 +10,31 @@ module Api
                 result = ::Questions::FetchIndex.new(params).call
 
                 render_success(
-                    serializer: nil,
                     message: "Questions fetched successfully",
                     meta: result[:meta]
                 ) { result[:data] }
             end
 
             def show
-                result = ::Questions::FetchShow.new(params).call
-
-                render_success(
-                    message: "Question fetched successfully"
-                ) { result[:data] }
+                render_success(message: "Question fetched successfully") do
+                    result[:data]
+                end
             end
 
             def create
                 question = Question.create!(question_params)
-                serializer = QuestionSerializer.new(question)
 
-                render_success(
-                    serializer: serializer,
-                    message: "Question created successfully",
-                    status: :created
-                )
+                render_success(message: "Question created successfully", status: :created) do
+                    QuestionSerializer.new(question).serializable_hash[:data]
+                end
             end
 
             def update
                 @question.update!(question_params)
-                serializer = QuestionSerializer.new(@question)
 
-                render_success(
-                    serializer: serializer,
-                    message: "Question updated successfully"
-                )
+                render_success(message: "Question updated successfully") do
+                    QuestionSerializer.new(@question).serializable_hash[:data]
+                end
             end
 
             def destroy
