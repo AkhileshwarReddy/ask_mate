@@ -8,11 +8,12 @@ module Api
             after_action :expire_index_cache, only: %i[create update destroy]
 
             def index
-                data = ::Questions::FetchIndex.new(params).call
+                result = ::Questions::FetchIndex.new(params).call
 
-                render_success(message: "Questions fetched successfully", meta: paginate(data)) do
-                    QuestionSerializer.new(data).serializable_hash[:data]
-                end
+                render_success(
+                    message: "Questions fetched successfully",
+                    meta: result[:meta]
+                ) { result[:data] }
             end
 
             def show

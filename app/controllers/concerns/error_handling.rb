@@ -1,3 +1,5 @@
+class AuthenticationError < StandardError; end
+
 module ErrorHandling
     extend ActiveSupport::Concern
 
@@ -5,6 +7,8 @@ module ErrorHandling
         rescue_from ActiveRecord::RecordNotFound,       with: :handle_not_found
         rescue_from ActiveRecord::RecordInvalid,        with: :handle_unprocessable_entity
         rescue_from ActionController::ParameterMissing, with: :handle_bad_request
+        rescue_from ActiveRecord::StatementInvalid,     with: :handle_internal_server_error 
+        rescue_from AuthenticationError,                with: :handle_unauthorized
     end
 
     private
@@ -19,6 +23,13 @@ module ErrorHandling
           meta:    meta,
           status:  status.to_s
         }, status: status
+    end
+
+    def handle_unauthorized(exception)
+        render_error(
+            errors: exception.message,
+            status: :unauthorized
+        )
     end
 
     def render_error(errors:, status: :unprocessable_entity)
@@ -47,6 +58,14 @@ module ErrorHandling
         render_error(
             errors: exception.record.errors.full_messages,
             status: :unprocessable_entity
+        )
+    end
+
+    def handle_internal_server_error(e)
+        byebug
+        render_error(
+            errors: e.message,
+            status: :internal_server_error
         )
     end
 end
