@@ -11,5 +11,6 @@ class Question < ApplicationRecord
     validates :body, presence: true, length: { minimum: 50, maximum: 1000 }
     validates :status, presence: true, inclusion: { in: STATUSES }
 
-    scope :with_tags, -> (names) { where(tags: { name: names }).distinct }
+    scope :with_tags, -> (names) { joins(:tags).includes(:tags).where(tags: { name: names }).distinct }
+    scope :recent, -> { order(created_at: :desc) }
 end

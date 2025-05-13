@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
+      post :signup, to: 'users#create'
+      post :login, to: 'sessions#create'
+
       resources :questions, only: %i[index show create update destroy] do
         resources :comments
         resources :answers, only: %i[index show create update destroy] do

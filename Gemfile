@@ -41,6 +41,10 @@ gem "kaminari", "~> 1.2"
 
 gem "rack-mini-profiler", "~> 3.3", require: false
 
+gem "jwt", "~> 2.10"
+gem "bcrypt", "~> 3.1"
+
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
